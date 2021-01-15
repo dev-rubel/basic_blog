@@ -113,6 +113,23 @@
         </p>
         <!-- Go home navigation ends here -->
 
-        <?php include __DIR__.'/../inc/footer.php'; ?>
     </div>
 </div>
+<?php include __DIR__.'/../inc/footer.php'; ?>
+<script>
+    $('.jssocials-share-link').on('click', function() {
+        $.ajax({
+            url: '<?=BASE_URL?>home/feedshare',
+            method: 'post',
+            data: {
+                postId: '<?=$postId?>'
+            },
+            success: function(res) {
+                console.log(res);
+            }, 
+            error: function(err) {
+                console.log(err);
+            }
+        })
+    });
+</script>

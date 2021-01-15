@@ -62,11 +62,11 @@
 	      	<p>Feed Per Page:</p>
 		    <input type="number" name="per_page" placeholder="Enter feed per page" value="<?php echo $sitedetails["per_page"] ?>">
 		    <p>Feed Like Point:</p>
-		    <input type="number" name="per_page" placeholder="Enter feed per page" value="<?php echo $sitedetails["like_point"] ?>">
-		    <p>Feed Like Point:</p>
-		    <input type="number" name="per_page" placeholder="Enter feed point" value="<?php echo $sitedetails["like_point"] ?>">
+		    <input type="number" name="like_point" placeholder="Enter feed like point" value="<?php echo $sitedetails["like_point"] ?>">
 		    <p>Feed Comment Point:</p>
-		    <input type="number" name="per_page" placeholder="Enter comment point" value="<?php echo $sitedetails["comment_point"] ?>">
+		    <input type="number" name="comment_point" placeholder="Enter feed comment point" value="<?php echo $sitedetails["comment_point"] ?>">
+		    <p>Feed Share Point:</p>
+		    <input type="number" name="share_point" placeholder="Enter feed share point" value="<?php echo $sitedetails["share_point"] ?>">
 			<input type="submit" name="update" value="Update">
 			<center style="margin-top: 5px;">
 				<a style="font-family: calibri; background: rgb(44 62 80);padding: 5px;color: white;text-decoration: none;" href="javascript:history.go(-1)">&larr; Go Back</a>

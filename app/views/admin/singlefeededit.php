@@ -1,25 +1,23 @@
 <?php
 	include __DIR__.'/../inc/header.php';
 
-		$posted = '';
-		// featured post count
-		$featuredQuery = $this->db->query("SELECT COUNT(*) as featuredCount FROM post WHERE featured=1");
-		$featuredRow = $featuredQuery->fetchArray();
+	$posted = '';
+	// featured post count
+	$featuredQuery = $this->db->query("SELECT COUNT(*) as featuredCount FROM post WHERE featured=1");
+	$featuredRow = $featuredQuery->fetchArray();
 
-		$userType = $_SESSION['user_type'];
-		$userId = $_SESSION['id'];
-		$userPost = $userType=='user'?" AND user_id=$userId":"";
-		// single post
-		$query = $this->db->query("SELECT * FROM post WHERE id='$id' $userPost");
-		$postCount = $query->numRows();
+	$userType = $_SESSION['user_type'];
+	$userId = $_SESSION['id'];
+	$userPost = $userType=='user'?" AND user_id=$userId":"";
+	// single post
+	$query = $this->db->query("SELECT * FROM post WHERE id='$id' $userPost");
+	$postCount = $query->numRows();
 
-		// unable to acces anoter user post
-		if(!$postCount) {
-			header("location: ".BASE_URL.'home/all');
-		}
-		$row = $query->fetchArray();
-
-
+	// unable to acces anoter user post
+	if(!$postCount) {
+		header("location: ".BASE_URL.'home/all');
+	}
+	$row = $query->fetchArray();
 ?>
 
 <style type="text/css">

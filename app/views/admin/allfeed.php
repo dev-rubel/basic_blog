@@ -23,6 +23,7 @@
 		<!-- body post start here -->
 		<div class="body1">
 		<?php 
+			$dataFound = false;
 	        $no_of_records_per_page = $sitedetails["per_page"];
 	        $offset = ($pageno-1) * $no_of_records_per_page;
 
@@ -34,7 +35,10 @@
 
 			$query = $this->db->query("SELECT * FROM post ORDER BY id DESC LIMIT $offset, $no_of_records_per_page");
 			if($query->numRows() > 0) {
+				$dataFound = true;
+				$feedId = [];
 			foreach ($query->fetchAll() as $row) {
+				$feedId[$row['id']] = $row['id'];
 		?>
 			<div class="thumbnailh">
 				<!-- Post title start here -->
@@ -72,9 +76,10 @@
 			<?php } else {?>
 				<p style="text-align: center;">No Feed Found</p>
 			<?php } ?>
-			
-		<?php if($query->numRows() > 0) {?>
-		<ul class="pagination">
+			<div id="loadFeed"></div>
+
+		<?php if($dataFound) {?>
+		<ul class="pagination" style="display: none;">
 	        <li><a href="<?=BASE_URL;?>home/all">First</a></li>
 	        <?php if($pageno != 1) {?>
 	        <li class="<?php if($pageno <= 1){ echo 'disabled'; } ?>">
@@ -88,16 +93,34 @@
 		    <?php } ?>
 	        <li><a href="<?=BASE_URL;?>home/all/<?php echo $total_pages; ?>">Last</a></li>
 	    </ul>
-	    <?php } ?>
+		<?php } ?>
 		</div>
 		<!-- body post ends here -->
 	</div>
 </div>
 <?php include __DIR__.'/../inc/footer.php'; ?>
 <script>
+	var feedId = '<?=json_encode($feedId)?>';
+	var per_page = 1;
 	$(window).scroll(function() {
 	   if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
-	       alert("near bottom!");
+	       // alert("near bottom!");
+	       per_page = per_page+1;
+	       $.ajax({
+	       		url: '<?=BASE_URL?>home/getPageFeed',
+	       		method: 'post',
+	       		data: {
+	       			per_page: per_page,
+	       			feedId: feedId
+	       		},
+	       		success: function(res) {
+	       			$('#loadFeed').append(res);
+	       			// console.log(res);
+	       		},
+	       		error: function(err) {
+	       			console.log(err);
+	       		}
+	       })
 	   }
 	});
 </script>

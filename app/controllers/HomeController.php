@@ -2,18 +2,29 @@
 
 class HomeController extends Controller
 {
+    public $sitedetails;
+
     public function __construct() 
     {   
         parent::__construct();
         if (!isset($_SESSION["admin"])) { 
             header("location: login");
         }
+        $this->sitedetails = $this->db->query('SELECT * FROM sitedetails')->fetchArray();
     }
 
     public function addfeed()
     {
         $title = 'Add Feed';
         $this->view('admin/addfeed', ['title' => $title]);
+    }
+
+    public function feedEngag($postId, $pointType = '')
+    {
+        $query2 = $this->db->query("SELECT engag FROM post WHERE id='$postId'");
+        $engag = $query2->fetchArray()['engag']+$this->sitedetails[$pointType];
+        $query3 = $this->db->query("UPDATE post SET engag='$engag' WHERE id='$postId' ");
+        return $query3->affectedRows();
     }
 
     public function feedlike()
@@ -33,12 +44,16 @@ class HomeController extends Controller
         }
 
         $query1 = $this->db->query("INSERT INTO post_likes(post_id, user_id) VALUES('$postId','$userId') ");
-        $query2 = $this->db->query("SELECT engag FROM post WHERE id='$postId'");
-        $engag = $query2->fetchArray()['engag']+3;
-        $query3 = $this->db->query("UPDATE post SET engag='$engag' WHERE id='$id' ");
+        $this->feedEngag($postId, 'like_point');
 
         $_SESSION['message'] = 'Liked.';
         header('location: '.BASE_URL.'home/single/'.$postId);
+    }
+
+    public function feedshare()
+    {
+        $postId = $_POST['postId'];
+        echo $this->feedEngag($postId, 'share_point');
     }
 
     public function insertfeed()
@@ -134,6 +149,7 @@ class HomeController extends Controller
             }
             $query = $this->db->query("INSERT INTO comment(name, user_id, message, postid) VALUES('$name', '$userId', '$message', '$postid') ");
             if ($query->lastInsertID()) {
+                $this->feedEngag($postid, 'comment_point');
                 $_SESSION['message'] = 'Comment Submit.';
                 header("location: ".BASE_URL.'home/single/'.$postid);
             }
@@ -151,6 +167,15 @@ class HomeController extends Controller
         return $this->view('admin/setting', ['title' => $title]);
     }
 
+    public function getPageFeed()
+    {
+        $pageno = $_POST['per_page'];
+        $no_of_records_per_page = $this->sitedetails["per_page"];
+        $offset = ($pageno-1) * $no_of_records_per_page;
+        $query = $this->db->query("SELECT * FROM post ORDER BY id DESC LIMIT $offset, $no_of_records_per_page");
+        echo $this->view('admin/dynamicfeed', ['query' => $query]);
+    }
+
     public function updatesetting()
     {
         // onliy admin can access
@@ -163,8 +188,11 @@ class HomeController extends Controller
             $title = $_POST['title'];
             $text = $_POST['text'];
             $per_page = $_POST['per_page'];
+            $like_point = $_POST['like_point'];
+            $comment_point = $_POST['comment_point'];
+            $share_point = $_POST['share_point'];
 
-            $query = $this->db->query("UPDATE sitedetails SET sitetitle='$title', sitetagline='$text', per_page='$per_page' WHERE id='$id' ");
+            $query = $this->db->query("UPDATE sitedetails SET sitetitle='$title', sitetagline='$text', per_page='$per_page', like_point='$like_point', comment_point='$comment_point', share_point='$share_point' WHERE id='$id' ");
 
             if ($query) {
                 $posted = "<p style='color:white;background:green;padding:5px;border-radius:5px;text-align:center;'>Posted Successfully <br><span>Refresh the page to see result!</span></p>";
