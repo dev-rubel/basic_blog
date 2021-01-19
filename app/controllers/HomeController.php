@@ -172,7 +172,7 @@ class HomeController extends Controller
         $pageno = $_POST['per_page'];
         $no_of_records_per_page = $this->sitedetails["per_page"];
         $offset = ($pageno-1) * $no_of_records_per_page;
-        $query = $this->db->query("SELECT * FROM post ORDER BY id DESC LIMIT $offset, $no_of_records_per_page");
+        $query = $this->db->query("SELECT *, 1/TIMESTAMPDIFF(MINUTE, datetime, NOW())+engag AS age FROM post ORDER BY age DESC LIMIT $offset, $no_of_records_per_page");
         echo $this->view('admin/dynamicfeed', ['query' => $query]);
     }
 

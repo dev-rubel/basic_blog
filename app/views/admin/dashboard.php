@@ -35,7 +35,7 @@
 			<i class="fa fa-star" style="color: red;" title="Featured"></i>
 			<?php }?>
 		</h3>
-		<small style="margin: 0px;background: black none repeat scroll 0% 0%;color: white;padding: 3px;font-size: 10px;">Date: <?php echo $row["date"]; ?></small>
+		<small style="margin: 0px;background: black none repeat scroll 0% 0%;color: white;padding: 3px;font-size: 10px;">Date: <?php echo date('Y-m-d', strtotime($row["datetime"])); ?></small>
 		<small style="margin: 0px;background: black none repeat scroll 0% 0%;color: white;padding: 3px;font-size: 10px;">Tags: <?php echo $row["category"]; ?></small>
 		<p style="color: black;" >
 			<?php echo substr($row['text'],0,300)."..."; ?>

@@ -33,7 +33,7 @@
 	        // dd($total_rows);
 	        $total_pages = ceil($total_rows / $no_of_records_per_page);
 
-			$query = $this->db->query("SELECT * FROM post ORDER BY id DESC LIMIT $offset, $no_of_records_per_page");
+			$query = $this->db->query("SELECT *, 1/TIMESTAMPDIFF(MINUTE, datetime, NOW())+engag AS age FROM post ORDER BY age DESC LIMIT $offset, $no_of_records_per_page");
 			if($query->numRows() > 0) {
 				$dataFound = true;
 				$feedId = [];
@@ -55,7 +55,7 @@
 			</div>
 			<div class="feed-shot-des">
 				  <!-- Post date start here -->
-				<small class="belowpost">Date: <?php echo $row["date"]; ?></small>
+				<small class="belowpost">Date: <?php echo date('Y-m-d', strtotime($row["datetime"])); ?></small>
 				<small class="belowpost">Tags: <?php echo $row["category"]; ?></small>
 				 <!-- Post date ends here -->
 

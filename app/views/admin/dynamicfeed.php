@@ -19,7 +19,7 @@
 	</div>
 	<div class="feed-shot-des">
 		  <!-- Post date start here -->
-		<small class="belowpost">Date: <?php echo $row["date"]; ?></small>
+		<small class="belowpost">Date: <?php echo date('Y-m-d', strtotime($row["datetime"])); ?></small>
 		<small class="belowpost">Tags: <?php echo $row["category"]; ?></small>
 		 <!-- Post date ends here -->
 
